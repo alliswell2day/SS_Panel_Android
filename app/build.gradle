@@ -1,0 +1,102 @@
+apply plugin: 'com.android.application'
+apply plugin: 'android-apt'
+apply plugin: 'realm-android'
+
+android {
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+    useLibrary rootProject.ext.android.useLibrary
+    defaultConfig {
+        multiDexEnabled true
+        applicationId rootProject.ext.android.applicationId
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        testInstrumentationRunner rootProject.ext.android.testInstrumentationRunner
+
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            multiDexEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']//将so文件目录指向libs目录
+        }
+    }
+
+}
+
+repositories {
+    mavenCentral()
+
+    maven {
+        url "https://raw.github.com/embarkmobile/zxing-android-minimal/mvn-repo/maven-repository/"
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+
+
+    compile('com.googlecode.json-simple:json-simple:1.1.1') {
+        exclude group: 'junit', module: 'junit'
+        exclude group: 'org.hamcrest', module: 'hamcrest-core'
+    }
+
+    testCompile 'junit:junit:4.12'
+
+    //base
+    compile rootProject.ext.dependencies["zxing-minimal"]
+    compile rootProject.ext.dependencies["zxing-integration"]
+    compile rootProject.ext.dependencies["zxing-core"]
+    compile rootProject.ext.dependencies["jdk15on"]
+
+    //ui
+    compile rootProject.ext.dependencies["appcompat-v7"]
+    compile rootProject.ext.dependencies["design"]
+    compile rootProject.ext.dependencies["recyclerview-v7"]
+    compile rootProject.ext.dependencies["cardview-v7"]
+    //compile rootProject.ext.dependencies["html-textview"]
+    //compile rootProject.ext.dependencies["glide-transformations"]
+
+    //rx
+    compile rootProject.ext.dependencies["rxjava"]
+    compile rootProject.ext.dependencies["rxandroid"]
+    compile rootProject.ext.dependencies["rxpermissions"]
+    //network
+    compile rootProject.ext.dependencies["gson"]
+    compile rootProject.ext.dependencies["retrofit"]
+    compile rootProject.ext.dependencies["retrofit-converter-gson"]
+    compile rootProject.ext.dependencies["retrofit-adapter-rxjava2"]
+    compile rootProject.ext.dependencies["okhttp"]
+    compile rootProject.ext.dependencies["okhttp-logging-interceptor"]
+    compile rootProject.ext.dependencies["glide"]
+    compile rootProject.ext.dependencies["glide-okhttp3-integration"]
+    compile rootProject.ext.dependencies["jsoup"]
+    //di
+    compile rootProject.ext.dependencies["dagger"]
+    compile rootProject.ext.dependencies["dagger-compiler"]
+    compile rootProject.ext.dependencies["butterknife"]
+    apt rootProject.ext.dependencies["butterknife-compiler"]
+    provided rootProject.ext.dependencies["annotation"]
+    //other
+    compile rootProject.ext.dependencies["multidex"]
+    compile rootProject.ext.dependencies["logger"]
+    compile rootProject.ext.dependencies["fragmentation"]
+    compile rootProject.ext.dependencies["crashreport"]
+    //canary
+    debugCompile rootProject.ext.dependencies["blockcanary-android"]
+    releaseCompile rootProject.ext.dependencies["blockcanary-no-op"]
+    debugCompile rootProject.ext.dependencies["leakcanary-android"]
+    releaseCompile rootProject.ext.dependencies["leakcanary-android-no-op"]
+    compile files('libs/BmobPay_v3.1.1_170111.jar')
+}
